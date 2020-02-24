@@ -32,7 +32,7 @@ class DataGeneratorType2(DataGenerator):
     def generate_input_data(self, products_df):
         """ Standard columns for messages & random product amount sold generated """
         products_df = super(DataGeneratorType2, self).generate_input_data(products_df)
-        products_df['amount'] = np.random.randint(1, 10, size=len(products_df))
+        products_df['amount'] = np.random.randint(2, 10, size=len(products_df))
         return products_df
 
 class DataGeneratorType3(DataGenerator):
