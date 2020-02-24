@@ -1,12 +1,12 @@
 ,product,value,message_type,amount,operation,random_val_op,adjusted_value,total_value
-0,Some Other Reboot That Costs More Than Triple,80.0,2,4,,,,80.0
-1,Animal Crossing,49.99,2,4,,,,49.99
-2,Cat Quest ,9.99,1,1,,,,9.99
-3,The Witcher III: The Wild Hunt,34.99,2,5,,,,34.99
-4,Spyro Reignited Trilogy,34.99,3,1,Add,3,37.99,37.99
-5,Mario Kart,49.99,1,1,,,,49.99
-6,Super Mario Maker 2,32.29,3,1,Subtract,4,28.29,28.29
-7,Pokemon Shield ,60.0,2,6,,,,60.0
-8,Untitled Goose Game ,17.99,3,1,Subtract,4,13.99,13.99
-9,Pokemon Sword ,60.0,3,1,Subtract,1,59.0,59.0
-10,Hollow Knight,10.99,3,1,Multiply,3,32.97,32.97
+0,Spyro Reignited Trilogy,34.99,3,1,Multiply,5,174.95,174.95
+1,The Witcher III: The Wild Hunt,34.99,2,4,,,,34.99
+2,Hollow Knight,10.99,3,1,Multiply,4,43.96,43.96
+3,Pokemon Shield ,60.0,3,1,Add,2,62.0,62.0
+4,Some Other Reboot That Costs More Than Triple,80.0,3,1,Multiply,5,400.0,400.0
+5,Untitled Goose Game ,17.99,3,1,Add,2,19.99,19.99
+6,Animal Crossing,49.99,3,1,Subtract,4,45.99,45.99
+7,Cat Quest ,9.99,1,1,,,,9.99
+8,Mario Kart,49.99,3,1,Subtract,2,47.99,47.99
+9,Pokemon Sword ,60.0,1,1,,,,60.0
+10,Super Mario Maker 2,32.29,3,1,Add,4,36.29,36.29

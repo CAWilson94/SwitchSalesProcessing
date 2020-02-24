@@ -28,6 +28,8 @@ class DataGeneratorType2(DataGenerator):
         Should generate product, value and amount
         of each product sold.
     """
+    def _calculate_total_value(self, row):
+        return mul(row['value'], row['amount'])
 
     def generate_input_data(self, products_df):
         """ Standard columns for messages & random product amount sold generated """
