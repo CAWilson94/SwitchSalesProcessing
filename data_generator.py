@@ -35,6 +35,7 @@ class DataGeneratorType2(DataGenerator):
         """ Standard columns for messages & random product amount sold generated """
         products_df = super(DataGeneratorType2, self).generate_input_data(products_df)
         products_df['amount'] = np.random.randint(2, 10, size=len(products_df))
+        products_df['total_value'] = products_df.apply(self._calculate_total_value, axis=1)
         return products_df
 
 class DataGeneratorType3(DataGenerator):
@@ -57,8 +58,8 @@ class DataGeneratorType3(DataGenerator):
         products_df['operation'] = products_df.apply(self._add_random_operation, axis=1)
         products_df['random_val_op'] = np.random.randint(1,6, size=len(products_df))
         products_df['adjusted_value'] = products_df.apply(self._calculate_adjusted_value, axis=1)
+        products_df['amount'] = np.random.randint(2, 10, size=len(products_df))
         products_df['total_value'] = products_df.apply(self._calculate_total_value, axis=1)
-        #
         return products_df
 
 def main():
