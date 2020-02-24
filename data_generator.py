@@ -56,5 +56,28 @@ class DataGeneratorType3(DataGenerator):
         products_df['random_val_op'] = np.random.randint(1,6, size=len(products_df))
         products_df['adjusted_value'] = products_df.apply(self._calculate_adjusted_value, axis=1)
         products_df['total_value'] = products_df.apply(self._calculate_total_value, axis=1)
-        #products_df['message_type'] = np.random.randint(1,4, size=len(products_df)) # will need to do this for overall generation
+        #
         return products_df
+
+def main():
+    input_df = pd.read_csv("products.csv")
+    input_df['message_type'] = np.random.randint(1, 4, size=len(input_df))
+    input_df_list = [frame for message_type, frame in input_df.groupby('message_type')]
+
+    data_generator_type1 = DataGenerator()
+    data_generator_type2 = DataGeneratorType2()
+    data_generator_type3 = DataGeneratorType3()
+
+    data_generated_t1 = data_generator_type1.generate_input_data(input_df_list[0])
+    data_generated_t2 = data_generator_type2.generate_input_data(input_df_list[1])
+    data_generated_t3 = data_generator_type3.generate_input_data(input_df_list[2])
+
+    all_generated_data = pd.concat([data_generated_t1, data_generated_t2, data_generated_t3])
+    all_generated_data = all_generated_data.sample(frac=1).reset_index(drop=True) # shuffling our data
+    print(all_generated_data)
+    all_generated_data.to_csv("generated_product_data.csv")
+
+
+
+if __name__ == '__main__':
+    main()
