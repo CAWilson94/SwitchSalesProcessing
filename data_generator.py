@@ -1,3 +1,10 @@
+"""
+    Was thinking of Generator 1 with basic rule, then generator 2 with basic + extra
+    then generator 3 with generator 2 + extra (kind of propagating rules) but this
+    introduces a coupling between d3 and d2 so if they are separate it means d2 can
+    be amended/deleted without d3 being effected.
+"""
+
 from operator import add, sub, mul
 import numpy as np
 import pandas as pd
