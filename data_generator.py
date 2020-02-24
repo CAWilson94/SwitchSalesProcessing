@@ -31,7 +31,7 @@ class DataGeneratorType2(DataGenerator):
 
     def generate_input_data(self, products_df):
         """ Standard columns for messages & random product amount sold generated """
-        products_df = super(DataGeneratorType2, self).generate_input_data()
+        products_df = super(DataGeneratorType2, self).generate_input_data(products_df)
         products_df['amount'] = np.random.randint(1, 10, size=len(products_df))
         return products_df
 
@@ -51,23 +51,10 @@ class DataGeneratorType3(DataGenerator):
 
     def generate_input_data(self, products_df):
         """ Generate input data for type 3: product, value, amount and adjustments """
-        products_df = super(DataGeneratorType3, self).generate_input_data()
+        products_df = super(DataGeneratorType3, self).generate_input_data(products_df)
         products_df['operation'] = products_df.apply(self._add_random_operation, axis=1)
         products_df['random_val_op'] = np.random.randint(1,6, size=len(products_df))
         products_df['adjusted_value'] = products_df.apply(self._calculate_adjusted_value, axis=1)
         products_df['total_value'] = products_df.apply(self._calculate_total_value, axis=1)
         #products_df['message_type'] = np.random.randint(1,4, size=len(products_df)) # will need to do this for overall generation
         return products_df
-
-
-def main():
-    g1 = DataGenerator()
-    g2 = DataGeneratorType2()
-    g3 = DataGeneratorType3()
-    product_input = pd.read_csv('products.csv')
-    dataGenerator = DataGenerator(g1, g2, g3, product_input)
-    dataGenerator.generate_random_messages()
-
-
-if __name__ == '__main__':
-    main()

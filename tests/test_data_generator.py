@@ -1,6 +1,7 @@
 from unittest import TestCase
 import pandas as pd
-from data_generator import DataGenerator as dg
+from data_generator import DataGenerator, DataGeneratorType2, DataGeneratorType3
+
 
 def generate_test_input():
     data = [
@@ -18,13 +19,28 @@ def generate_test_input():
     columns = ['product', 'value']
     return pd.DataFrame(data=data, columns=columns)
 
+
 class TestDataGenerator(TestCase):
 
     def test__add_random_operation(self):
         products = generate_test_input()
-        data_generator =dg()
+        data_generator = DataGenerator()
         test_df = data_generator.generate_input_data(products)
         expected_df_len = 10
         self.assertEqual(expected_df_len, len(test_df))
 
+class TestDataGeneratorType2(TestCase):
+    def test_generate_input_data(self):
+        products = generate_test_input()
+        data_generator = DataGeneratorType2()
+        test_df = data_generator.generate_input_data(products)
+        expected_df_len = 10
+        self.assertEqual(expected_df_len, len(test_df))
 
+class TestDataGeneratorType3(TestCase):
+    def test_generate_input_data(self):
+        products = generate_test_input()
+        data_generator = DataGeneratorType3()
+        test_df = data_generator.generate_input_data(products)
+        expected_df_len = 10
+        self.assertEqual(expected_df_len, len(test_df))
