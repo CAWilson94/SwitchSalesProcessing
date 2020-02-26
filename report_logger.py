@@ -1,7 +1,6 @@
 import pandas as pd
 
 from sale import Sale
-from sales_calculator import SalesCalculator
 
 class ReportLogger:
     """
@@ -28,12 +27,4 @@ class ReportLogger:
 
     def end_report(self):
         """ return the end report """
-
-
-def main():
-    rl = ReportLogger([Sale('Orange', 10), Sale('Apple', 20), Sale('Apple', 20, amount=5)])
-    report = rl.basic_report()
-    print(report)
-
-if __name__ == '__main__':
-    main()
+        return 0
