@@ -1,8 +1,19 @@
 class Sale:
 
-    def __init__(self, product_type, value):
-        self.product_type = product_type
+    def __init__(self, product_type, value, amount=1, adjustment=None):
+        self.product = product_type
         self.value = value
+        self.amount = amount
+        self.adjustment = adjustment
+
+    def to_dict(self):
+        """ Object to dictionary for data frame usage """
+        return{
+            'product': self.product,
+            'value': self.value,
+            'amount': self.amount,
+            'adjustment': self.adjustment,
+        }
 
 
 """
