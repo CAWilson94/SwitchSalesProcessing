@@ -6,11 +6,6 @@ class ReportLogger:
     """
         Keeping this name generic as it could be used
         for items that are not sales ...
-
-        basic sales seems incorrect
-        e.g. for spyro on one you have 7 as the amount yet the max amount for count
-        we have as 5 with a total value of 174.95
-        this is just normal value * 5 which is coming from.. somewhere. 
     """
 
     def __init__(self, sales):
@@ -28,7 +23,7 @@ class ReportLogger:
         total_value_df = df.groupby(['product'])['total_value'].sum().reset_index(name='full_value')
         count_df = df.groupby(['product'])['amount'].sum().reset_index(name='count')
         basic_report_df = pd.merge(count_df, total_value_df, on=['product'])
-        print(basic_report_df) # probably should have delegated some of this to calculator?
+        return basic_report_df
 
     def end_report(self):
         """ return the end report """
