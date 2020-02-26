@@ -23,7 +23,7 @@ class ReportLogger:
         total_value_df = df.groupby(['product'])['total_value'].sum().reset_index(name='full_value')
         count_df = df.groupby(['product'])['value'].count().reset_index(name='count')
         basic_report_df = pd.merge(count_df, total_value_df, on=['product'])
-        return basic_report_df # probably should have delegated some of this to calculator?
+        print(basic_report_df) # probably should have delegated some of this to calculator?
 
     def end_report(self):
         """ return the end report """
