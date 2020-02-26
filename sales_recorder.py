@@ -12,9 +12,9 @@ class SalesRecorder:
 
     def _sales_logger_check(self):
         """ Checking when we need to log sales """
-        if (len(self.sales)%2) == 0:
+        if (len(self.sales)%10) == 0:
             sales_logger = ReportLogger(self.sales)
-            if(len(self.sales)%8)==0:
+            if(len(self.sales)%50)==0:
                 sales_logger.end_report() # think this returns
             sales_logger.basic_report()
         # probably want to store these in a df?

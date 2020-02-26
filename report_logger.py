@@ -6,6 +6,11 @@ class ReportLogger:
     """
         Keeping this name generic as it could be used
         for items that are not sales ...
+
+        basic sales seems incorrect
+        e.g. for spyro on one you have 7 as the amount yet the max amount for count
+        we have as 5 with a total value of 174.95
+        this is just normal value * 5 which is coming from.. somewhere. 
     """
 
     def __init__(self, sales):
