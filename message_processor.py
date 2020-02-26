@@ -5,7 +5,7 @@ from sales_recorder import SalesRecorder
 
 class MessageProcessor:
 
-    MAX_REPORT = 8 # change to 50
+    MAX_REPORT = 50 # change to 50
 
     def __init__(self, input):
         self.input = input
