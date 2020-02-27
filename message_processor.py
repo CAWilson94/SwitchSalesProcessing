@@ -15,3 +15,12 @@ class MessageProcessor:
         """ Get sales from the input given """
         for row in self.input.iloc[:self.MAX_REPORT].itertuples():
             self.sales_recorder.record_sale(Sale(row.product, round(row.value, 2), amount=row.amount))
+
+
+def main():
+    input = pd.read_csv('generated_product_data.csv')
+    mp = MessageProcessor(input)
+    mp.process_sales()
+
+if __name__ == '__main__':
+    main()

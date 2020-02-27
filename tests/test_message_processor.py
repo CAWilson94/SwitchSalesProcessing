@@ -21,6 +21,8 @@ class TestMessageProcessor(TestCase):
         self.assertEqual(['orange', 'banana', 'squid','banana'], actual_product_calls)
         self.assertEqual([0.30, 0.50, 5.67, 0.50], actual_value_calls)
         self.assertEqual([1, 1, 1, 8], actual_amount_calls)
+        print(mock_record_sale.call_args_list)
+        # assert any call to not care about order
 
 def create_test_input():
     """ Make some test input """

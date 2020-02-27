@@ -27,4 +27,4 @@ class ReportLogger:
 
     def end_report(self):
         """ return the end report """
-        return 0
+        return "you have reached the end "
