@@ -14,7 +14,8 @@ class MessageProcessor:
     def process_sales(self):
         """ Get sales from the input given """
         for row in self.input.iloc[:self.MAX_REPORT].itertuples():
-            self.sales_recorder.record_sale(Sale(row.product, round(row.value, 2), amount=row.amount))
+            self.sales_recorder.record_sale(Sale(row.product, round(row.value, 2),
+                                                 amount=row.amount, adjustment=row.operation))
 
 
 def main():

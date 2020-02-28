@@ -17,4 +17,4 @@ class SalesRecorder:
         if (int(len(self.sales)%10) and int(len(self.sales)< 50)) == 0:
             sales_logger.basic_report()
         if (int(len(self.sales) % 50)) == 0:
-            sales_logger.end_report()
+            print(sales_logger.end_report())
