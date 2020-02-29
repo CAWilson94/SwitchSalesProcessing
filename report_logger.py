@@ -2,6 +2,7 @@ from functools import reduce
 
 import pandas as pd
 
+
 from sale import Sale
 
 class ReportLogger:
@@ -12,7 +13,6 @@ class ReportLogger:
 
     def __init__(self, sales):
         self.sales_list = sales
-        #self.sales_calculator = SalesCalculator(sales)
 
     def _get_sales_dict(self):
         df = pd.DataFrame.from_records([sale.to_dict() for sale in self.sales_list])
@@ -34,28 +34,26 @@ class ReportLogger:
         """
         df = self._get_sales_dict()
 
-        adjustment_types = df.adjustment.unique() # columns of new df
-        # need number of occurrences of each of these per product
-        boop = df.groupby(['product'])
+        adjustment_types = [x for x in df['adjustment'].unique() if isinstance(x, str)]
+        product_types = df['product'].unique()
+
+        product_groups = df.groupby(['product'])
         frames = []
-        for item in boop:
-            frames.append(item[1].groupby(['product', 'adjustment'])['adjustment'].count().reset_index(name="numAdjust"))
+        for group in product_groups:
+            frames.append(group[1].groupby(['product', 'adjustment'])['adjustment'].count().reset_index(name="num_adjust"))
         result = pd.concat(frames)
-        result = result.pivot(index="product", columns="adjustment", values="numAdjust")
+        result = result.pivot(index="product", columns="adjustment", values="num_adjust")
         result = result.fillna(0.0)
-        products = list(set(df['product']))
 
-        for item in products: # add adjustment types here too
-            print(item, "Add:", result.loc[item]['Add'],
-                  "Multiply:", result.loc[item]['Multiply'],
-                  "Subtract:", result.loc[item]['Subtract'])
+        for product in product_types:
+            print("Adjustments made for {} were: ".format(product, [(type, result.loc[product][type]) for type in adjustment_types]))
 
-
-        # have it with a separate df per product but I want it to be a df showing product, add, mult, sub as col headers
-        # and num adjustments as row values under those headers
+        #for product, type in [(product,type) for product in product_types for type in adjustment_types]: # add adjustment types here too
+         #   print("{} {}: {}".format(product, type, result.loc[product][type]))
 
 
-        adj_type = "Subtract"
+
+
 
         return "you have reached the end "
 
