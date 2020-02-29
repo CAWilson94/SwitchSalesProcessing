@@ -36,6 +36,7 @@ class ReportLogger:
 
         adjustment_types = [x for x in df['adjustment'].unique() if isinstance(x, str)]
         product_types = df['product'].unique()
+        
 
         product_groups = df.groupby(['product'])
         frames = []
@@ -43,17 +44,12 @@ class ReportLogger:
             frames.append(group[1].groupby(['product', 'adjustment'])['adjustment'].count().reset_index(name="num_adjust"))
         result = pd.concat(frames)
         result = result.pivot(index="product", columns="adjustment", values="num_adjust")
-        result = result.fillna(0.0)
-
-        for product in product_types:
-            print("Adjustments made for {} were: ".format(product, [(type, result.loc[product][type]) for type in adjustment_types]))
-
-        #for product, type in [(product,type) for product in product_types for type in adjustment_types]: # add adjustment types here too
-         #   print("{} {}: {}".format(product, type, result.loc[product][type]))
-
-
-
-
+        result = result.fillna(0.0)     
+        
+        for index, row in result.iterrows(): 
+            print("Adjustments for ", index, " are ", end = " ")
+            [print(item, " : ", row[item], end=" ") for item in adjustment_types]
+            print("\n")
 
         return "you have reached the end "
 
