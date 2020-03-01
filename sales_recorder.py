@@ -13,8 +13,9 @@ class SalesRecorder:
 
     def _sales_logger_check(self):
         """ Checking when we need to log sales """
-        sales_logger = ReportLogger(self.sales)
         if (int(len(self.sales)%10) and int(len(self.sales)< 50)) == 0:
+            sales_logger = ReportLogger(self.sales)
             sales_logger.basic_report()
         if (int(len(self.sales) % 50)) == 0:
+            sales_logger = ReportLogger(self.sales)
             print(sales_logger.end_report())

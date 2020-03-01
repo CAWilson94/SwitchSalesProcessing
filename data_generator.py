@@ -82,11 +82,32 @@ def main():
     data_generated_t2 = data_generator_type2.generate_input_data(input_df_list[1])
     data_generated_t3 = data_generator_type3.generate_input_data(input_df_list[2])
 
-    all_generated_data = pd.concat([data_generated_t1, data_generated_t2, data_generated_t3])
-    all_generated_data = all_generated_data.sample(frac=1).reset_index(drop=True) # shuffling our data
-    print(all_generated_data)
-    all_generated_data.to_csv("generated_product_data.csv")
+    input_file_path =  "input_messages.txt"
+    fo = open(input_file_path, "a+")
+    for index, row in data_generated_t1.iterrows(): 
+        line = "{} at {}\n".format(row['product'], row['value'])
+        fo.writelines(line)
 
+    for index, row in data_generated_t2.iterrows(): 
+        line = "{} of {} at £{} each\n".format(row['amount'], row['product'], row['value'])
+        fo.writelines(line)
+
+    for index, row in data_generated_t3.iterrows(): 
+        line = "{} £{} {}\n".format(row['operation'], row['random_val_op'], row['product'] )
+        fo.writelines(line)
+
+    fo.close()
+
+    # shuffling data for realistic input ... 
+    lines = open(input_file_path).readlines()
+    random.shuffle(lines)
+    open(input_file_path, 'w').writelines(lines)
+    
+    #all_generated_data = pd.concat([data_generated_t1, data_generated_t2, data_generated_t3])
+    #all_generated_data = all_generated_data.sample(frac=1).reset_index(drop=True) # shuffling our data
+    #print(all_generated_data)
+    #all_generated_data.to_csv("generated_product_data.csv")
+    
 
 
 if __name__ == '__main__':
