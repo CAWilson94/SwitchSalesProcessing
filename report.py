@@ -6,11 +6,19 @@ class Report:
         self.df = df
 
     def basic_report(self): 
-        self.df['total_value'] = self.df.apply(lambda row: row['amount'] * row['value'], axis=1)
-        total_value_df = self.df.groupby(['product'])['total_value'].sum().reset_index(name='full_value')
-        count_df = self.df.groupby(['product'])['amount'].sum().reset_index(name='count')
-        basic_report_df = pd.merge(count_df, total_value_df, on=['product'])
+        total_value_df = self._total_value_df()
+        number_sales_df = self._number_sales_df()
+        basic_report_df = pd.merge(number_sales_df, total_value_df, on=['product'])
         return basic_report_df
+
+    def _total_value_df(self): 
+        """ Get total value of sales, represented as a column total_value_sales """       
+        total_value_df = self.df.groupby(['product'])['adjusted_total_value'].sum().reset_index(name='total_value_sales')
+        return total_value_df
+    
+    def _number_sales_df(self): 
+        """ Get number of sales of each product, represented as a column number_sales""" 
+        return self.df.groupby(['product'])['amount'].sum().reset_index(name='number_sales')
 
     def end_report_adjustment_stats(self): 
         adjustment_types = [x for x in self.df['adjustment'].unique() if isinstance(x, str)]

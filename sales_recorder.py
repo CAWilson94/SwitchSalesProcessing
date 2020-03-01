@@ -7,9 +7,7 @@ class SalesRecorder:
 
     def record_sale(self, sale):
         """ Store individual sales in collection of sale"""
-        self.sales.append(sale)
-        self._sales_logger_check() #rename
-
+        self.sales.append(sale)       
 
     def _sales_logger_check(self):
         """ Checking when we need to log sales """

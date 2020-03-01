@@ -2,10 +2,12 @@ import pandas as pd
 from sale import Sale
 
 from sales_recorder import SalesRecorder
+from report_logger import ReportLogger
 
 class MessageProcessor:
 
-    MAX_REPORT = 50
+    MAX_REPORT_ITER = 50
+    BASIC_REPORT_ITER = 10
     OPERATIONS = set(["add", "subtract", "multiply"])
     UNUSED_WORDS = ['of', 'at', 'each']
 
@@ -21,8 +23,8 @@ class MessageProcessor:
             product = " ".join(word_list[:-1]).title()
             sale = Sale(product, value=value)
             return sale
-        except expression as e:
-            print("use a logger instead")        
+        except Exception as e:
+            logger.warn("Cannot parse messagee type one: {}. Expected format <product> at <value>".format(e))
 
     def _parse_message_two(self, word_list): 
         """ Parse messages showing product, value and amount of products in sale. """ 
@@ -33,20 +35,15 @@ class MessageProcessor:
             product = " ".join(word_list[1: -1]).title()
             sale = Sale(product, amount=amount, value=value)
             return sale
-        except expression as e:
-            print("use a logger instead")
+        except Exception as e:
+            logger.warn("Cannot parse messagee type two: {}. Expected format <amount> of <product> at <value> each".format(e))
 
     def _apply_adjustments(self, word_list): 
         """ Parse messgage that shows adjustments for product. """ 
         try:
             operation = word_list[0]
             amount = float(word_list[1][1:]) # gives us item 1 from list then index 1 onwards for this (skipping the £)
-            product = " ".join(word_list[2:]).title() # allowing for spaces in product namne
-            """ 
-            instead of saving a new sale you want to loop through 
-            all current sales with the same product name and add this adjustment to them.. 
-        
-            """ 
+            product = " ".join(word_list[2:]).title() # allowing for spaces in product namne           
             for sale in self.sales_recorder.sales: 
                 if sale.product.lower() == product.lower(): 
                     sale.add_adjustment(operation, amount)
@@ -55,7 +52,7 @@ class MessageProcessor:
             logger.warn("Cannot parse adjustment message: {}".format(e))
 
     def process_messages(self): 
-        """ Determine message type and process into sales """
+        """ Determine message type and process into sales """        
         input_file = open(self.input_path, 'r')
         for line in input_file:             
             word_list = line.lower().split()
@@ -68,8 +65,28 @@ class MessageProcessor:
                 sale = self._parse_message_one(word_list)
                 self.sales_recorder.record_sale(sale)
             else: 
-                print(f"input: {line} could not be processed.")                                 
+                logger.info(f"input: {line} could not be processed.")                                 
                 continue # probably don't want to store NO sale 
+            len_sales = len(self.sales_recorder.sales)
+            if (len_sales%self.BASIC_REPORT_ITER ==0) and (len_sales>0): 
+                self._prepare_report(len_sales)
+                if (len_sales%self.MAX_REPORT_ITER ==0): # should have already done end report as 50 can divide by 10 also                       
+                    break
+
+    def _prepare_report(self, number_sales):
+        """ Apply adjustments for sales and call report """  
+        for sale in self.sales_recorder.sales: 
+            sale.apply_adjustments()
+        sales_report_logger = ReportLogger(self.sales_recorder.sales)
+        if number_sales == self.BASIC_REPORT_ITER: 
+            sales_report_logger.basic_report()
+        else: 
+            #sales_report_logger.end_report()
+            print("THE END IS NIGH.")
+        
+        
+        
+
             
 
     def process_sales(self):
