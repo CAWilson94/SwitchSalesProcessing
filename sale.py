@@ -1,56 +1,37 @@
+import collections 
+import operator
+
 class Sale:
 
-    def __init__(self, product_type, value, amount=1, adjustment=None):
+    def __init__(self, product_type, value=0, amount=1):
         self.product = product_type
         self.value = value
-        self.amount = amount
-        self.adjustment = adjustment
+        self.adjusted_value = value # starts out this way ...
+        self.amount = amount     
+        self.total_value = self.value   
+        self.adjusted_total_value = value # starts out this way 
+        self.Adjustment = collections.namedtuple('Adjustment', 'operation adjusted_amount')        
+        self.adjustments_made = []
+
+    def add_adjustment(self, operation, amount): 
+        """ Add operations and amount for operations to be applied to sale """ 
+        adjusment = self.Adjustment(operation=operation, adjusted_amount=amount)
+        self.adjustments_made.append(adjusment)
+
+    def apply_adjustments(self):
+        """ Should apply adjustments in order """ 
+        for item in self.adjustments_made: 
+            self.value = operator.item.operation(self.value, item.adjusted_amount)   
+            self.total_value = operator.mul(self.value, self.amount)     
 
     def to_dict(self):
         """ Object to dictionary for data frame usage """
         return{
             'product': self.product,
-            'value': self.value,
-            'amount': self.amount,
-            'adjustment': self.adjustment,
+            'original_value': self.value,
+            'original_sale_total_value': self.total_value,
+            'amount': self.amount,     
+            'adjusted_value': self.adjusted_value,
+            'adjusted_total_value': self.adjusted_total_value,       
         }
 
-
-"""
-Sale comes in --> 
-    Record it 
-    When a sale is recorded, a message comes with it so this is "processed" ... aye
-    
-Every 10th Message -->
-    Log a report detailing the number of sales for each product and their total value 
-        Do I need a product class?
-        
-After 50 Messages --> 
-    Application should log that it is pausing 
-    Stop accepting new messages and log a report of adjustments that have been made to EACH SALE TYPE while the
-    application was running 
-    
-e.g. product = apple 
-     1 sale 
-     10p 
-     
-     product = apple 
-     20 sales 
-     10p each 
-     
-     product = apple 
-     operation add 
-     adjustment value 20p 
-     (add this to EACH sale of apples ALREADY recorded) 
-     
-     after 10 messages:
-     21 sales of apples 
-     total value = 21 * 10 ==> 210
-     (21 * 10) + (20 * 21) ==> 210 + 420 ==> 630
-     
-     So now after 50 messages: 
-     Product: apple 
-     number sales: 21 
-     adjustments: add 20p, others here  
-
-"""
