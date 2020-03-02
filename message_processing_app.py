@@ -26,6 +26,8 @@ class MessageProcessingApp:
                 self.number_messages += 1
             except UnicodeDecodeError as e: 
                 logging.warn("Input Error: %s", e)
+            finally: 
+                input_file.close()
 
 
     def _prepare_report(self): 

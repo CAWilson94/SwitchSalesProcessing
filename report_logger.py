@@ -32,7 +32,7 @@ class ReportLogger:
         #result = self.report.end_report()
         df_list = []
         for sale in self.sales_list: 
-            df = pd.DataFrame.from_dict(sale.adjustments_dict)
+            df = pd.DataFrame.from_dict(sale.applied_adjustments_dict)
             df_list.append(df)
         df = pd.concat(df_list)
         print(df)
