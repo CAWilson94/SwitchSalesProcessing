@@ -30,12 +30,11 @@ class ReportLogger:
     def end_report(self):
         """ return the end report """                      
         #result = self.report.end_report()
-        adjustments_cols = self.sales_list[0].adjustments_dict.keys()
-        adjustment_df_init = pd.DataFrame(columns=adjustments_cols)
-        df = pd.DataFrame()
+        df_list = []
         for sale in self.sales_list: 
             df = pd.DataFrame.from_dict(sale.adjustments_dict)
-            df = pd.concat([adjustment_df_init, df])
+            df_list.append(df)
+        df = pd.concat(df_list)
         print(df)
 
         

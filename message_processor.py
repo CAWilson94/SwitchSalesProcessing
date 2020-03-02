@@ -75,7 +75,7 @@ class MessageProcessor:
             number_messages += 1
             if (number_messages%self.BASIC_REPORT_ITER ==0) and (number_messages>0): 
                 self._prepare_report(number_messages)
-                if (number_messages%self.MAX_REPORT_ITER ==0): # should have already done end report as 50 can divide by 10 also                       
+                if (number_messages%self.MAX_REPORT_ITER ==0): # should have already done end report as 50 can divide by 10 also                                       
                     break
 
     def _prepare_report(self, number_messages):
