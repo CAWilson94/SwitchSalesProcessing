@@ -37,11 +37,3 @@ class ReportLogger:
         df = pd.concat(df_list)
         print(df)
 
-        
-        """
-        for index, row in result.iterrows(): 
-            print("Adjustments for ", index, " are ", end = " ")
-            [print(item, " : ", row[item], end=" ") for item in adjustment_types]
-            print("\n")        
-        """
-
