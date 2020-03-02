@@ -2,8 +2,6 @@ import logging
 import pandas as pd
 
 from sale import Sale
-from sales_recorder import SalesRecorder
-from report_logger import ReportLogger
 
 class MessageProcessor:
    
