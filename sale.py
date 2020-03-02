@@ -29,6 +29,9 @@ class Sale:
             self.adjusted_value = self.OPERATIONS[adjustment.operation](self.value, adjustment.adjusted_amount)   
             self.adjusted_total_value = mul(self.adjusted_value, self.amount)  
             self._add_adjustment_to_dict(adjustment.operation, adjustment.adjusted_amount)
+            # new value which can be adjusted 
+            self.value = self.adjusted_value
+            self.total_value = self.adjusted_total_value
 
     def _add_adjustment_to_dict(self, operation, amount_adjusted): 
         self.adjustments_dict["product"].append(self.product)
