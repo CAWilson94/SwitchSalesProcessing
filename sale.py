@@ -31,6 +31,7 @@ class Sale:
             self._add_adjustment_to_dict(adjustment.operation, adjustment.adjusted_amount)
 
     def _add_adjustment_to_dict(self, operation, amount_adjusted): 
+        self.adjustments_dict["product"].append(self.product)
         self.adjustments_dict["value"].append(self.value)
         self.adjustments_dict["operation"].append(operation)
         self.adjustments_dict["adjusted_amount"].append(amount_adjusted)
@@ -42,6 +43,7 @@ class Sale:
     def _adjustments_to_dict(self, operation="no op", amount_adjusted=0): 
         """ create dictionary """ 
         return {
+            "product": [],
             "value": [],
             "operation": [],
             "adjusted_amount": [],
