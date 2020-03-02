@@ -52,7 +52,7 @@ class DataGeneratorType3(DataGenerator):
         """ Random operation generated for product adjustment """
         return random.choice(list(operations.keys()))
 
-    def _calculate_adjusted_value(self, row): #TODO: - may need to add to propagate previous sales?
+    def _calculate_adjusted_value(self, row):
         """ Calculate the total value of products sold  """
         return round(operations[row['operation']](row['value'], (row['random_val_op'])), 2)
 
