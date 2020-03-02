@@ -1,6 +1,7 @@
+import logging
 import pandas as pd
-from sale import Sale
 
+from sale import Sale
 from sales_recorder import SalesRecorder
 from report_logger import ReportLogger
 
@@ -24,36 +25,40 @@ class MessageProcessor:
             sale = Sale(product, value=value)
             return sale
         except Exception as e:
-            logger.warn("Cannot parse messagee type one: {}. Expected format <product> at <value>".format(e))
+            logging.warn("Cannot parse messagee type one: {}. Expected format <product> at <value>".format(e))
 
     def _parse_message_two(self, word_list): 
         """ Parse messages showing product, value and amount of products in sale. """ 
         try:
             word_list = [word for word in word_list if word not in self.UNUSED_WORDS]
             amount = int(word_list[0])
-            value = float(word_list[-1][1:]) # grab end value then string values after the £ sign
+            value = float(word_list[-1])
             product = " ".join(word_list[1: -1]).title()
             sale = Sale(product, amount=amount, value=value)
             return sale
         except Exception as e:
-            logger.warn("Cannot parse messagee type two: {}. Expected format <amount> of <product> at <value> each".format(e))
+            logging.warn("Cannot parse messagee type two: {}. Expected format <amount> of <product> at <value> each".format(e))
 
     def _apply_adjustments(self, word_list): 
         """ Parse messgage that shows adjustments for product. """ 
         try:
             operation = word_list[0]
-            amount = float(word_list[1][1:]) # gives us item 1 from list then index 1 onwards for this (skipping the £)
+            try: 
+                amount = float(word_list[1])
+            except Exception as e: 
+                logging.warn("what is this: {}".format(e))
             product = " ".join(word_list[2:]).title() # allowing for spaces in product namne           
             for sale in self.sales_recorder.sales: 
                 if sale.product.lower() == product.lower(): 
                     sale.add_adjustment(operation, amount)
                        
         except Exception as e:
-            logger.warn("Cannot parse adjustment message: {}".format(e))
+            logging.warn("Cannot parse adjustment message: {}".format(e))
 
     def process_messages(self): 
         """ Determine message type and process into sales """        
         input_file = open(self.input_path, 'r')
+        number_messages = 0
         for line in input_file:             
             word_list = line.lower().split()
             if self.OPERATIONS.intersection(word_list):
@@ -65,29 +70,24 @@ class MessageProcessor:
                 sale = self._parse_message_one(word_list)
                 self.sales_recorder.record_sale(sale)
             else: 
-                logger.info(f"input: {line} could not be processed.")                                 
+                logging.info(f"input: {line} could not be processed.")                                 
                 continue # probably don't want to store NO sale 
-            len_sales = len(self.sales_recorder.sales)
-            if (len_sales%self.BASIC_REPORT_ITER ==0) and (len_sales>0): 
-                self._prepare_report(len_sales)
-                if (len_sales%self.MAX_REPORT_ITER ==0): # should have already done end report as 50 can divide by 10 also                       
+            number_messages += 1
+            if (number_messages%self.BASIC_REPORT_ITER ==0) and (number_messages>0): 
+                self._prepare_report(number_messages)
+                if (number_messages%self.MAX_REPORT_ITER ==0): # should have already done end report as 50 can divide by 10 also                       
                     break
 
-    def _prepare_report(self, number_sales):
+    def _prepare_report(self, number_messages):
         """ Apply adjustments for sales and call report """  
         for sale in self.sales_recorder.sales: 
             sale.apply_adjustments()
         sales_report_logger = ReportLogger(self.sales_recorder.sales)
-        if number_sales == self.BASIC_REPORT_ITER: 
+        if number_messages < self.MAX_REPORT_ITER: 
             sales_report_logger.basic_report()
-        else: 
-            #sales_report_logger.end_report()
+        if number_messages == self.MAX_REPORT_ITER: 
+            sales_report_logger.end_report()
             print("THE END IS NIGH.")
-        
-        
-        
-
-            
 
     def process_sales(self):
         """ Get sales from the input given """

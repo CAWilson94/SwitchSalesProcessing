@@ -20,6 +20,10 @@ class Report:
         """ Get number of sales of each product, represented as a column number_sales""" 
         return self.df.groupby(['product'])['amount'].sum().reset_index(name='number_sales')
 
+    def end_report(self): 
+        print("something something end report")
+
+
     def end_report_adjustment_stats(self): 
         adjustment_types = [x for x in self.df['adjustment'].unique() if isinstance(x, str)]
         product_types = self.df['product'].unique()        

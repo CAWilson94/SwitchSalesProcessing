@@ -14,10 +14,10 @@ class ReportLogger:
 
     def __init__(self, sales):
         self.sales_list = sales
-        df = self._get_sales_dict()        
+        df = self._get_sales_df()        
         self.report = Report(df)
 
-    def _get_sales_dict(self):
+    def _get_sales_df(self):
         df = pd.DataFrame.from_records([sale.to_dict() for sale in self.sales_list])
         return df
 
@@ -36,18 +36,3 @@ class ReportLogger:
             [print(item, " : ", row[item], end=" ") for item in adjustment_types]
             print("\n")        
 
-def main(): # add type checks for all in Sale?
-    sales = [Sale("orange", 10, adjustment="Add"), Sale("orange", 10, adjustment="Add"),
-             Sale("orange", 10, adjustment="Add"), Sale("orange", 10, adjustment="Multiply"),
-             Sale("potato", 10, adjustment="Subtract"), Sale("potato", 10, adjustment="Subtract"),
-             Sale("potato", 10, adjustment="Multiply"), Sale("potato", 10, adjustment="Multiply"),
-             Sale("potato", 10, adjustment="Add")
-             ]
-
-    rl = ReportLogger(sales)
-    rl.end_report()
-
-
-
-if __name__ == '__main__':
-    main()

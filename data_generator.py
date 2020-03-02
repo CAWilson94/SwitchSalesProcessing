@@ -84,16 +84,19 @@ def main():
 
     input_file_path =  "input_messages.txt"
     fo = open(input_file_path, "a+")
+
+    pound = "U+00A3"
+
     for index, row in data_generated_t1.iterrows(): 
-        line = "{} at {}\n".format(row['product'], row['value'])
+        line = f"{row['product']} at {row['value']}\n"
         fo.writelines(line)
 
     for index, row in data_generated_t2.iterrows(): 
-        line = "{} of {} at £{} each\n".format(row['amount'], row['product'], row['value'])
+        line = f"{row['amount']} of {row['product']} at {row['value']} each\n"
         fo.writelines(line)
 
     for index, row in data_generated_t3.iterrows(): 
-        line = "{} £{} {}\n".format(row['operation'], row['random_val_op'], row['product'] )
+        line = f"{row['operation']} {row['random_val_op']} {row['product']}\n"
         fo.writelines(line)
 
     fo.close()
