@@ -8,6 +8,9 @@ The message format has been agreed on before hand and will not change -
 e.g. Message type 1 is of format <product> at value
 Message type 2 is of format <number> of <product> at <value> each
 Message type 3 is of format <operation> <adjustment_value> <product>
+  
+*To Run*: 
+Go to message_processing_app.py and run from the main here. 
 
 ## Method
 I wrote down some products represented by nintendo switch games and assigned these prices. There are perhaps 
