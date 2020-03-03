@@ -20,18 +20,19 @@ class MessageProcessor:
             elif word_list[0].isdigit():
                 sale = self._parse_message_two(word_list) # message two is amount of product message
                 self.sales_list.append(sale)
-            elif(self._check_float(word_list[-1])): # message one is basic type and value
+            elif(self._check_float(word_list[-1], message)): # message one is basic type and value
                 sale = self._parse_message_one(word_list)
                 self.sales_list.append(sale)
         except Exception as e:              
             logging.info("Could not parse message %s.\n%s", message, e) 
 
-    def _check_float(self, value):
+    def _check_float(self, value, message):
         """ Check if item returns a float or not """
         try:
             float(value)
             return True
         except ValueError:
+            logging.warning("Float required for product value: %s", message)
             return False
 
     def _apply_adjustments(self, word_list): 

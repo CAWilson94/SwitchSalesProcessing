@@ -29,7 +29,6 @@ class TestMessageProcessingApp(TestCase):
             mock_report.return_value.log_basic_report.assert_any_call()
             self.mpa.sales_list[0].apply_adjustments.assert_any_call()
 
-
     @mock.patch('message_processing_app.Report')
     @mock.patch('message_processing_app.logging')
     @mock.patch('message_processing_app.MessageProcessor')
@@ -54,7 +53,6 @@ class TestMessageProcessingApp(TestCase):
             self.assertTrue(mock_logging.warning.called)
             self.assertTrue(mock_logging.assert_called_with(
                 "Input Error: [Errno 2] No such file or directory: 'test_input_messages.txt'"))
-
 
 def create_test_input():
     """ Generic test input. """

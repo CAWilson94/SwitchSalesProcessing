@@ -24,6 +24,15 @@ class TestMessageProcessor(TestCase):
         self.message_processor._parse_message_one.assert_called_with(message.lower().split())
 
     @mock.patch('message_processor.logging')
+    def test_invalid_message_process_type_one(self, mock_logging):
+        with self.assertRaises(Exception) as context:
+            message = "Metroid Prime 4 at eightQuid"
+            self.message_processor.process_message(message)
+            expected_error = "Float required for product value: {}".format(message)
+            self.assertTrue(mock_logging.warning.called)
+            self.assertTrue(expected_error in context.exception)
+
+    @mock.patch('message_processor.logging')
     def test_invalid_message_process(self, mock_logging):
         with self.assertRaises(Exception) as context:
             message = None
@@ -31,9 +40,16 @@ class TestMessageProcessor(TestCase):
             expected_error = "AttributeError: 'NoneType' object has no attribute 'lower'"
             self.assertTrue(expected_error in context.exception)
             self.assertTrue(mock_logging.warning.called)
-            self.assertTrue(mock_logging.assert_called_with("Could not parse message Some invalid input. \n %s",
-                                                            expected_error))
+            mock_logging.assert_called_with("Could not parse message Some invalid input. \n %s", expected_error)
 
+    def test__apply_adjustments(self):
+        pass
+
+    def test__parse_message_one(self):
+        pass
+
+    def test__parse_message_two(self):
+        pass
 
 def create_test_input_list():
     """ Generic test input. """
