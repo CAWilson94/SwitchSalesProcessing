@@ -24,7 +24,7 @@ class MessageProcessor:
                 sale = self._parse_message_one(word_list)
                 self.sales_list.append(sale)
         except Exception as e:              
-            logging.info("Could not parse message %s.\n%s", message, e) 
+            logging.info("Could not parse message {}.\n{}".format(message, e))
 
     def _check_float(self, value, message):
         """ Check if item returns a float or not """
@@ -32,22 +32,18 @@ class MessageProcessor:
             float(value)
             return True
         except ValueError:
-            logging.warning("Float required for product value: %s", message)
+            logging.warning("Float required for product value: {}".format(message))
             return False
 
     def _apply_adjustments(self, word_list): 
         """ Parse message that shows adjustments for product. """
         try:
             operation = word_list[0]
-            try: 
-                amount = float(word_list[1])
-            except Exception as e: 
-                logging.warning("{}".format(e))
+            amount = float(word_list[1])
             product = " ".join(word_list[2:]).title() # allowing for spaces in product namne           
             for sale in self.sales_list: 
                 if sale.product.lower() == product.lower(): 
                     sale.add_adjustment(operation, amount)
-                       
         except Exception as e:
             logging.warning("Cannot parse adjustment message: {}".format(e))
 

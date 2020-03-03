@@ -40,10 +40,25 @@ class TestMessageProcessor(TestCase):
             expected_error = "AttributeError: 'NoneType' object has no attribute 'lower'"
             self.assertTrue(expected_error in context.exception)
             self.assertTrue(mock_logging.warning.called)
-            mock_logging.assert_called_with("Could not parse message Some invalid input. \n %s", expected_error)
+            mock_logging.assert_called_with("Could not parse message Some invalid input. \n {}".format(expected_error))
 
     def test__apply_adjustments(self):
-        pass
+        adjustment_message = "Add 2 Animal Crossing".split()# use this for other test "Add 2 Giraffes on Unicycles"
+        mock_sale = mock.MagicMock()
+        mock_sale.product = "Animal Crossing"
+        self.message_processor.sales_list = [mock_sale]
+        self.message_processor._apply_adjustments(adjustment_message)
+        self.assertTrue(self.message_processor.sales_list[0].add_adjustment.called)
+
+    @mock.patch('message_processor.logging')
+    def test__apply_adjustments_exceptions(self, mock_logging):
+        with self.assertRaises(Exception) as context:
+            adjustment_message = None
+            self.message_processor._apply_adjustments(adjustment_message)
+            expected_exception_err = "'NoneType' object is not subscriptable"
+            expected_error = "Cannot parse adjustment message: {}".format(expected_exception_err)
+            self.assertTrue(mock_logging.warning.called)
+            mock_logging.assert_called_with(expected_error)
 
     def test__parse_message_one(self):
         pass
