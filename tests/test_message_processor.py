@@ -43,7 +43,7 @@ class TestMessageProcessor(TestCase):
             mock_logging.assert_called_with("Could not parse message Some invalid input. \n {}".format(expected_error))
 
     def test__apply_adjustments(self):
-        adjustment_message = "Add 2 Animal Crossing".split()# use this for other test "Add 2 Giraffes on Unicycles"
+        adjustment_message = "Add 2 Animal Crossing".split()  # use this for other test "Add 2 Giraffes on Unicycles"
         mock_sale = mock.MagicMock()
         mock_sale.product = "Animal Crossing"
         self.message_processor.sales_list = [mock_sale]
@@ -60,11 +60,39 @@ class TestMessageProcessor(TestCase):
             self.assertTrue(mock_logging.warning.called)
             mock_logging.assert_called_with(expected_error)
 
-    def test__parse_message_one(self):
-        pass
+    @mock.patch('message_processor.Sale')
+    def test__parse_message_one(self, mock_sale):
+        message = "Animal Crossing at 34.98".split()
+        self.message_processor._parse_message_one(message)
+        mock_sale.assert_called_with("Animal Crossing", value=34.98)
 
-    def test__parse_message_two(self):
-        pass
+    @mock.patch('message_processor.logging')
+    def test__parse_message_one_exceptions(self, mock_logging):
+        with self.assertRaises(Exception) as context:
+            expected_error = "Cannot parse message type one: {}. Expected format <product> at <value>".format(
+                " 'NoneType' object is not iterable")
+            message = None
+            self.message_processor._parse_message_one(message)
+            mock_logging.assert_called_with(expected_error)
+            self.assertTrue(mock_logging.warning.called)
+
+    @mock.patch('message_processor.Sale')
+    def test__parse_message_two(self, mock_sale):
+        message = "5 of Animal Crossing at 34.98 each".split()
+        self.message_processor._parse_message_two(message)
+        mock_sale.assert_called_with("Animal Crossing", amount=5, value=34.98)
+
+    @mock.patch('message_processor.logging')
+    def test__parse_message_two_exceptions(self, mock_logging):
+        with self.assertRaises(Exception) as context:
+            expected_error = "Cannot parse message type one: {}. Expected format <product> at <value>".format(
+                " 'NoneType' object is not iterable")
+            message = None
+            self.message_processor._parse_message_two(message)
+            mock_logging.assert_called_with(expected_error)
+            self.assertTrue(mock_logging.warning.called)
+
+
 
 def create_test_input_list():
     """ Generic test input. """
