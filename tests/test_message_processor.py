@@ -1,34 +1,48 @@
-
 import mock
-import pandas as pd
 from unittest import TestCase
 
 from message_processor import MessageProcessor
 
+
 class TestMessageProcessor(TestCase):
 
     def setUp(self):
-        self.test_input = create_test_input()
-        self.message_processor = MessageProcessor(self.test_input)
+        self.message_processor = MessageProcessor(create_test_input_list())
 
-    @mock.patch('message_processor.SalesRecorder.record_sale')
-    def test_process_sales(self, mock_record_sale):
-        self.message_processor.process_sales()
-        actual_amount_calls = [item[0][0].amount for item in mock_record_sale.call_args_list]
-        actual_value_calls = [item[0][0].value for item in mock_record_sale.call_args_list]
-        actual_product_calls = [item[0][0].product for item in mock_record_sale.call_args_list]
-        self.assertEqual(mock_record_sale.call_count, len(self.test_input))
-        self.assertEqual(['orange', 'banana', 'squid','banana'], actual_product_calls)
-        self.assertEqual([0.30, 0.50, 5.67, 0.50], actual_value_calls)
-        self.assertEqual([1, 1, 1, 8], actual_amount_calls)
-        print(mock_record_sale.call_args_list)
-        # assert any call to not care about order
+    def test_process_message(self):
+        message = create_test_input_list()[0]
+        self.message_processor._parse_message_two = mock.MagicMock()
+        self.message_processor._apply_adjustments = mock.MagicMock()
+        self.message_processor._parse_message_one = mock.MagicMock()
+        self.message_processor.process_message(message)
+        self.message_processor._parse_message_two.assert_called_with(message.lower().split())
+        message = create_test_input_list()[3]
+        self.message_processor.process_message(message)
+        self.message_processor._apply_adjustments.assert_called_with(message.lower().split())
+        message = create_test_input_list()[1]
+        self.message_processor.process_message(message)
+        self.message_processor._parse_message_one.assert_called_with(message.lower().split())
 
-def create_test_input():
-    """ Make some test input """
-    sales_dict = {
-        'product': ['orange', 'banana', 'squid', 'banana'],
-        'value': [0.30, 0.50, 5.67, 0.50],
-        'amount': [1, 1, 1, 8],
-    }
-    return pd.DataFrame.from_dict(sales_dict)
+    @mock.patch('message_processor.logging')
+    def test_invalid_message_process(self, mock_logging):
+        with self.assertRaises(Exception) as context:
+            message = None
+            self.message_processor.process_message(message)
+            expected_error = "AttributeError: 'NoneType' object has no attribute 'lower'"
+            self.assertTrue(expected_error in context.exception)
+            self.assertTrue(mock_logging.warning.called)
+            self.assertTrue(mock_logging.assert_called_with("Could not parse message Some invalid input. \n %s",
+                                                            expected_error))
+
+
+def create_test_input_list():
+    """ Generic test input. """
+    return [
+        "9 of Mario Kart at 49.99 each", "Super Mario Maker 2 at 32.29",
+        "8 of Animal Crossing at 49.99 each", "Add 2 Animal Crossing",
+        "Untitled Goose Game  at 17.99", "Multiply 2 Untitled Goose Game",
+        "Add 5 Animal Crossing", "9 of Mario Kart at 49.99 each", "Super Mario Maker 2 at 32.29",
+        "8 of Animal Crossing at 49.99 each", "Add 2 Animal Crossing",
+        "Untitled Goose Game  at 17.99", "Multiply 2 Untitled Goose Game",
+        "Add 5 Animal Crossing"
+    ]

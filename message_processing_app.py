@@ -21,7 +21,7 @@ class MessageProcessingApp:
             for message in input_file:             
                     message_processor.process_message(message)                        
                     if (self.number_messages % self.BASIC_REPORT_ITER == 0) and (self.number_messages > 0): 
-                        self.sales_list = message_processor.sales_list  
+                        self.sales_list = message_processor.sales_list
                         self._prepare_report()
                         if (self.number_messages % self.MAX_REPORT_ITER == 0):                                    
                             break
@@ -30,7 +30,6 @@ class MessageProcessingApp:
             logging.warning("Input Error: %s", e)
         finally: 
             input_file.close()
-            
 
     def _prepare_report(self): 
         """ Prepare report """ 
